@@ -17,6 +17,9 @@ const FooterStyled = styled.footer`
       color: #7b113a;
     }
   }
+  @media (min-width: 1200px) {
+    margin-left: 6rem;
+  }
 `
 
 const Footer = () => {

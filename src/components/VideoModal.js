@@ -1,4 +1,6 @@
 import React from 'react';
+import useFetch from '../hooks/useFetch';
+import { API_URL_START,  API_URL_END_SINGLE } from '../assets/constants';
 import styled from 'styled-components';
 import { X } from '@styled-icons/feather/X';
 
@@ -41,8 +43,11 @@ const CloseIcon = styled(X)`
 	width: 30px;
 `
 
-const VideoModal = ({ hidden, openVideo, videoId }) => {
+const VideoModal = ({ hidden, openVideo, media, id, src }) => {
+  const videos = useFetch(`${API_URL_START}${media}/${id}/videos${API_URL_END_SINGLE}&language=en-US`)
+  const video = videos && videos[0].key;
     return (
+      videos &&
         <VideoModalStyled hidden={hidden}>
             <div className="button-container">
                 <div className="btn" onClick={openVideo}>
@@ -53,10 +58,11 @@ const VideoModal = ({ hidden, openVideo, videoId }) => {
                 <iframe
                 width="640"
                 height="360"
-                src={`https://www.youtube.com/embed/${videoId}`}
+                src={src ? `https://www.youtube.com/embed/${video}` : undefined}
                 frameBorder="0"
                 allowFullScreen
                 title="Embedded youtube"
+                controls
                 />
             </div>
         </VideoModalStyled>

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import getNumericYear from '../utils/getNumericYear.js';
-import useFetch from '../hooks/useFetch';
-import { API_URL_START,  API_URL_END_SINGLE } from '../assets/constants';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Play } from '@styled-icons/boxicons-regular/Play';
@@ -9,8 +7,6 @@ import RatingStars from './RatingStars';
 import VideoModal from './VideoModal';
 
 const HeroStyled = styled.section`
-  /* background: linear-gradient(to top,black,black,transparent 40%), url(${({ img }) => `https://image.tmdb.org/t/p/w300/${img}`}); */
-  /* height: 350px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -19,7 +15,6 @@ const HeroStyled = styled.section`
   .img-wrapper {
     width: 100%;
     flex: 1 1 auto;
-    /* max-height: 215px; */
     position: relative;
     img {
       width: 100%;
@@ -79,7 +74,6 @@ const HeroStyled = styled.section`
     }
   }
   @media(min-width: 992px) {
-    /* background: linear-gradient(to right, black, black, transparent 60%), url(${({ img }) => `https://image.tmdb.org/t/p/w1280/${img}`}); */
     height: 550px;
     margin-bottom: 50px;
     position: relative;
@@ -147,15 +141,18 @@ const PlayIcon = styled(Play)`
 `
 
 const Hero = ({ data }) => {
-  const date = data && (data.first_air_date || data.release_date)
+  const date = data && (data.first_air_date || data.release_date);
   const year = getNumericYear(date);
-  const videos = useFetch(`${API_URL_START}${data.original_name ? 'tv' : 'movie'}/${data.id}/videos${API_URL_END_SINGLE}&language=en-US`)
-  const video = videos && videos[0].key;
+  const isMediaType = data && data.media_type;
+  const media = data && (isMediaType || (data.original_name ? 'tv' : 'movie'))
+  const id = data && data.id;
 
   const [hidden, setHidden] = useState(true);
-
+  const [src, setSrc] = useState(false);
+  
   const openVideo = () => {
     setHidden(!hidden);
+    setSrc(!src)
   }
 
   return (
@@ -185,9 +182,8 @@ const Hero = ({ data }) => {
           Watch Trailer
         </button>
       </div>
-      <VideoModal hidden={hidden} openVideo={openVideo} videoId={video} />
+      <VideoModal hidden={hidden} openVideo={openVideo} media={media} id={id} src={src}/>
     </HeroStyled>
-  
   )
 }
 
