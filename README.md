@@ -16,7 +16,7 @@ You are also able to search for movies, tv shows or persons that you want in the
 The data is provided by [TMDb](https://www.themoviedb.org/)
 
 ### Live Version
-
+https://movies-tv-browser.netlify.app/
 
 ### How To Use
 
